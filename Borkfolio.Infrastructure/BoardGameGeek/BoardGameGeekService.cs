@@ -6,21 +6,16 @@ namespace Borkfolio.Infrastructure.BoardGameGeek
 {
     public class BoardGameGeekService : IBoardGameGeekService
     {
-        private readonly HttpClient httpClient;
+        private readonly HttpClient _httpClient;
 
         public BoardGameGeekService(IHttpClientFactory httpClientFactory)
         {
-            this.httpClient = httpClientFactory.CreateClient("BoardGameGeek");
+            _httpClient = httpClientFactory.CreateClient("BoardGameGeek");
         }
 
-        public Task<BggBoardGameDetails> GetBoardGameDetails(int it)
+        public async Task<List<BggCollectionItem>> GetMyCollection()
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<BggCollection> GetMyCollection()
-        {
-            var httpResponseMessage = await httpClient.GetAsync("collection?username=borkmeister&subtype=boardgame&own=1");
+            var httpResponseMessage = await _httpClient.GetAsync("collection?username=borkmeister&subtype=boardgame&own=1");
 
             var xml = await httpResponseMessage.Content.ReadAsStringAsync();
 
@@ -37,12 +32,24 @@ namespace Borkfolio.Infrastructure.BoardGameGeek
                 throw new Exception("TODO: update this null collection exception");
             }
 
-            return result;
+            return result.Items;
         }
 
-        public Task<BggSearchResultSet> SearchBoardGames(string name)
+        public async Task<List<BggSearchResultItem>> SearchBoardGames(string name)
         {
-            throw new NotImplementedException();
+            var httpResponseMessage = await _httpClient.GetAsync($"search?query={name}&type=boardgame");
+
+            var xml = await httpResponseMessage.Content.ReadAsStringAsync();
+
+            BggSearchResultSet? result;
+            XmlSerializer serializer = new XmlSerializer(typeof(BggSearchResultSet));
+
+            using (StringReader reader = new StringReader(xml))
+            {
+                result = (BggSearchResultSet?)serializer.Deserialize(reader);
+            }
+
+            return result?.Items ?? new List<BggSearchResultItem>();
         }
     }
 }

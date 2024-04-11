@@ -4,8 +4,7 @@ namespace Borkfolio.Application.Contracts.Infrastructure
 {
     public interface IBoardGameGeekService
     {
-        Task<BggCollection> GetMyCollection();
-        Task<BggSearchResultSet> SearchBoardGames(string name);
-        Task<BggBoardGameDetails> GetBoardGameDetails(int it);
+        Task<List<BggCollectionItem>> GetMyCollection();
+        Task<List<BggSearchResultItem>> SearchBoardGames(string name);
     }
 }

@@ -5,10 +5,10 @@ namespace Borkfolio.Application.Models.BoardGameGeek
     [XmlRoot(ElementName = "items")]
     public class BggSearchResultSet
     {
-        [XmlElement(ElementName = "total")]
-        public int? Count { get; set; }
+        [XmlAttribute(AttributeName = "total")]
+        public int Count { get; set; }
 
         [XmlElement(ElementName = "item")]
-        List<BggSearchResultItem>? Items { get; set; }
+        public List<BggSearchResultItem> Items { get; set; } = default!;
     }
 }
