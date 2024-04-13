@@ -1,5 +1,7 @@
-﻿using Borkfolio.Application.Contracts.Infrastructure;
-using Borkfolio.Application.Models.BoardGameGeek;
+﻿using Borkfolio.Application.Features.BoardGames.Queries.GetBoardGameDetails;
+using Borkfolio.Application.Features.BoardGames.Queries.GetMyCollection;
+using Borkfolio.Application.Features.BoardGames.Queries.SearchBoardGames;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Borkfolio.Api.Controllers
@@ -8,23 +10,45 @@ namespace Borkfolio.Api.Controllers
     [ApiController]
     public class BoardGameController : ControllerBase
     {
-        private readonly IBoardGameGeekService _boardGameGeekService;
+        private readonly IMediator _mediator;
 
-        public BoardGameController(IBoardGameGeekService boardGameGeekService)
+        public BoardGameController(IMediator mediator)
         {
-            _boardGameGeekService = boardGameGeekService;
+            _mediator = mediator;
         }
 
         [HttpGet(Name = "GetMyCollection")]
-        public async Task<List<BggCollectionItem>> GetMyCollection()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<List<CollectionItemDto>>> GetMyCollection()
         {
-            return await _boardGameGeekService.GetMyCollection();
+            List<CollectionItemDto>? result = await _mediator.Send(new GetMyCollectionQuery());
+
+            return Ok(result);
         }
 
         [HttpGet("{name}", Name = "Search")]
-        public async Task<List<BggSearchResultItem>> Search(string name)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<List<BoardGameSearchResultDto>>> Search(string name)
         {
-            return await _boardGameGeekService.SearchBoardGames(name);
+            List<BoardGameSearchResultDto>? result = await _mediator.Send(
+                new SearchBoardGamesQuery { Name = name }
+            );
+
+            return Ok(result);
+        }
+
+        [HttpGet("{id}", Name = "Details")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<BoardGameDetailsDto>> Details(int id)
+        {
+            BoardGameDetailsDto? result = await _mediator.Send(
+                new GetBoardGameDetailsQuery { Id = id }
+            );
+
+            return Ok(result);
         }
     }
 }

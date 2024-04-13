@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Borkfolio.Persistence.Migrations
 {
     [DbContext(typeof(BorkfolioDbContext))]
-    [Migration("20240410233617_InitialMigration")]
+    [Migration("20240412202300_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -33,17 +33,20 @@ namespace Borkfolio.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BoardGameId"));
 
+                    b.Property<int>("BoardGameGeekId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Owned")
-                        .HasColumnType("bit");
 
                     b.Property<int>("Year")
                         .HasColumnType("int");
 
                     b.HasKey("BoardGameId");
+
+                    b.HasIndex("BoardGameGeekId")
+                        .IsUnique();
 
                     b.ToTable("BoardGames");
                 });

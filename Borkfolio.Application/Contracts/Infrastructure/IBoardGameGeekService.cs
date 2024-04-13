@@ -6,5 +6,6 @@ namespace Borkfolio.Application.Contracts.Infrastructure
     {
         Task<List<BggCollectionItem>> GetMyCollection();
         Task<List<BggSearchResultItem>> SearchBoardGames(string name);
+        Task<BggGameDetailsItem> GetBoardGameDetails(int id);
     }
 }

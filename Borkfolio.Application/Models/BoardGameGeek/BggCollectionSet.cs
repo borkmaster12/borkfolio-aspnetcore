@@ -3,7 +3,7 @@
 namespace Borkfolio.Application.Models.BoardGameGeek
 {
     [XmlRoot(ElementName = "items")]
-    public class BggCollection
+    public class BggCollectionSet
     {
         [XmlAttribute(AttributeName = "totalitems")]
         public int Count { get; set; }

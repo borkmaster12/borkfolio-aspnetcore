@@ -2,7 +2,7 @@
 using Borkfolio.Application.Models.BoardGameGeek;
 using System.Xml.Serialization;
 
-namespace Borkfolio.Infrastructure.BoardGameGeek
+namespace Borkfolio.Infrastructure.Services.BoardGameGeek
 {
     public class BoardGameGeekService : IBoardGameGeekService
     {
@@ -13,18 +13,40 @@ namespace Borkfolio.Infrastructure.BoardGameGeek
             _httpClient = httpClientFactory.CreateClient("BoardGameGeek");
         }
 
+        public async Task<BggGameDetailsItem> GetBoardGameDetails(int id)
+        {
+            var httpResponseMessage = await _httpClient.GetAsync($"thing?id={id}&type=boardgame,boardgameexpansion");
+
+            var xml = await httpResponseMessage.Content.ReadAsStringAsync();
+
+            BggGameDetailsSet? result;
+            XmlSerializer serializer = new XmlSerializer(typeof(BggGameDetailsSet));
+
+            using (StringReader reader = new StringReader(xml))
+            {
+                result = (BggGameDetailsSet?)serializer.Deserialize(reader);
+            }
+
+            if (result?.Items?[0] == null)
+            {
+                throw new Exception("TODO: update this null collection exception");
+            }
+
+            return result.Items[0];
+        }
+
         public async Task<List<BggCollectionItem>> GetMyCollection()
         {
             var httpResponseMessage = await _httpClient.GetAsync("collection?username=borkmeister&subtype=boardgame&own=1");
 
             var xml = await httpResponseMessage.Content.ReadAsStringAsync();
 
-            BggCollection? result;
-            XmlSerializer serializer = new XmlSerializer(typeof(BggCollection));
+            BggCollectionSet? result;
+            XmlSerializer serializer = new XmlSerializer(typeof(BggCollectionSet));
 
             using (StringReader reader = new StringReader(xml))
             {
-                result = (BggCollection?)serializer.Deserialize(reader);
+                result = (BggCollectionSet?)serializer.Deserialize(reader);
             }
 
             if (result == null)
