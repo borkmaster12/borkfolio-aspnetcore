@@ -1,5 +1,6 @@
 ﻿using Borkfolio.Application.Contracts.Infrastructure;
 using Borkfolio.Infrastructure.Services.BoardGameGeek;
+using Borkfolio.Infrastructure.Services.ProfanityChecker;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Borkfolio.Infrastructure
@@ -9,6 +10,7 @@ namespace Borkfolio.Infrastructure
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
         {
             services.AddScoped<IBoardGameGeekService, BoardGameGeekService>();
+            services.AddScoped<IProfanityCheckerService, ProfanityCheckerService>();
 
             services.AddHttpClient(
                 "BoardGameGeek",

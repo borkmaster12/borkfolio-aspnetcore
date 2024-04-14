@@ -1,4 +1,5 @@
-﻿using Borkfolio.Application.Features.BoardGames.Queries.GetBoardGameDetails;
+﻿using Borkfolio.Application.Features.BoardGames.Commands.CreateSuggestion;
+using Borkfolio.Application.Features.BoardGames.Queries.GetBoardGameDetails;
 using Borkfolio.Application.Features.BoardGames.Queries.GetMyCollection;
 using Borkfolio.Application.Features.BoardGames.Queries.SearchBoardGames;
 using MediatR;
@@ -49,6 +50,16 @@ namespace Borkfolio.Api.Controllers
             );
 
             return Ok(result);
+        }
+
+        [HttpPost(Name = "AddSuggestion")]
+        public async Task<ActionResult<CreateSuggestionCommandResponse>> AddSuggestion(
+            [FromBody] CreateSuggestionCommand createSuggestionCommand
+        )
+        {
+            var response = await _mediator.Send(createSuggestionCommand);
+
+            return Ok(response);
         }
     }
 }

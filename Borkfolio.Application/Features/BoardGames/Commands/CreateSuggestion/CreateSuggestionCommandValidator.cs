@@ -1,10 +1,11 @@
-﻿using FluentValidation;
+﻿using Borkfolio.Application.Contracts.Infrastructure;
+using FluentValidation;
 
 namespace Borkfolio.Application.Features.BoardGames.Commands.CreateSuggestion
 {
     public class CreateSuggestionCommandValidator : AbstractValidator<CreateSuggestionDto>
     {
-        public CreateSuggestionCommandValidator()
+        public CreateSuggestionCommandValidator(IProfanityCheckerService profanityCheckerService)
         {
             RuleFor(suggestion => suggestion.MinimumAge)
                 .NotEmpty()
@@ -13,8 +14,8 @@ namespace Borkfolio.Application.Features.BoardGames.Commands.CreateSuggestion
                 .WithMessage("No games with an age rating of 17+");
 
             RuleFor(suggestion => suggestion.Name)
-                .NotEmpty();
-            //TODO : Check for profanity in name
+                .Must(name => !profanityCheckerService.ContainsProfanity(name))
+                .WithMessage("Keep the suggestions clean please");
         }
     }
 }

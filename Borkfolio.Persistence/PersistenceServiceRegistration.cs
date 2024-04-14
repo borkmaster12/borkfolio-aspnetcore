@@ -15,6 +15,7 @@ namespace Borkfolio.Persistence
 
             services.AddScoped(typeof(IAsyncRepository<>), typeof(BaseRepository<>));
             services.AddScoped<IMyCollectionRepository, MyCollectionRepository>();
+            services.AddScoped<IBoardGameRepository, BoardGameRepository>();
 
             services.AddMemoryCache();
 

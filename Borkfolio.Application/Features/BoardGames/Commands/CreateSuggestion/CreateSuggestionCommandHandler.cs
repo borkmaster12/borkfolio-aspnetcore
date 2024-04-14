@@ -12,16 +12,21 @@ namespace Borkfolio.Application.Features.BoardGames.Commands.CreateSuggestion
         private readonly IAsyncRepository<Suggestion> _suggestionsRepository;
         private readonly IBoardGameGeekService _boardGameGeekService;
         private readonly IMapper _mapper;
+        private readonly IBoardGameRepository _boardGameRepository;
+        private readonly IProfanityCheckerService profanityCheckerService;
 
         public CreateSuggestionCommandHandler(
             IAsyncRepository<Suggestion> suggestionsRepository,
             IBoardGameGeekService boardGameGeekService,
-            IMapper mapper
-        )
+            IMapper mapper,
+            IBoardGameRepository boardGameRepository,
+            IProfanityCheckerService profanityCheckerService)
         {
             _suggestionsRepository = suggestionsRepository;
             _boardGameGeekService = boardGameGeekService;
             _mapper = mapper;
+            _boardGameRepository = boardGameRepository;
+            this.profanityCheckerService = profanityCheckerService;
         }
 
         public async Task<CreateSuggestionCommandResponse> Handle(
@@ -31,15 +36,15 @@ namespace Borkfolio.Application.Features.BoardGames.Commands.CreateSuggestion
         {
             var response = new CreateSuggestionCommandResponse();
 
-            var bggDetails = await _boardGameGeekService.GetBoardGameDetails(
+            var bggGameDetails = await _boardGameGeekService.GetBoardGameDetails(
                 request.BoardGameGeekId
             );
 
-            var suggestion = _mapper.Map<CreateSuggestionDto>(bggDetails);
+            var suggestionDto = _mapper.Map<CreateSuggestionDto>(bggGameDetails);
 
-            var validator = new CreateSuggestionCommandValidator();
+            var validator = new CreateSuggestionCommandValidator(profanityCheckerService);
 
-            var validationResult = await validator.ValidateAsync(suggestion);
+            var validationResult = await validator.ValidateAsync(suggestionDto);
 
             if (validationResult.Errors.Count > 0)
             {
@@ -51,7 +56,26 @@ namespace Borkfolio.Application.Features.BoardGames.Commands.CreateSuggestion
                 }
             }
 
-            if (response.Success) { }
+            if (response.Success)
+            {
+                var boardGame = await _boardGameRepository.GetByBoardGameGeekIdAsync(
+                    suggestionDto.BoardGameGeekId
+                );
+
+                boardGame ??= _mapper.Map<BoardGame>(suggestionDto);
+
+                var suggestion = new Suggestion
+                {
+                    BoardGameId = boardGame.BoardGameId,
+                    BoardGame = boardGame,
+                    CreatedDate = DateTime.UtcNow,
+                    LastModifiedDate = DateTime.UtcNow
+                };
+
+                await _suggestionsRepository.AddAsync(suggestion);
+
+                response.Suggestion = suggestionDto;
+            }
 
             return response;
         }
