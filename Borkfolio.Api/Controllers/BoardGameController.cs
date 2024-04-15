@@ -1,6 +1,8 @@
 ﻿using Borkfolio.Application.Features.BoardGames.Commands.CreateSuggestion;
 using Borkfolio.Application.Features.BoardGames.Queries.GetBoardGameDetails;
 using Borkfolio.Application.Features.BoardGames.Queries.GetMyCollection;
+using Borkfolio.Application.Features.BoardGames.Queries.GetSuggestions;
+using Borkfolio.Application.Features.BoardGames.Queries.GetSuggestionsSummary;
 using Borkfolio.Application.Features.BoardGames.Queries.SearchBoardGames;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -60,6 +62,26 @@ namespace Borkfolio.Api.Controllers
             var response = await _mediator.Send(createSuggestionCommand);
 
             return Ok(response);
+        }
+
+        [HttpGet(Name = "GetSuggestions")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<List<GetSuggestionsDto>>> GetSuggestions()
+        {
+            List<GetSuggestionsDto>? result = await _mediator.Send(new GetSuggestionsQuery());
+
+            return Ok(result);
+        }
+
+        [HttpGet(Name = "GetSuggestionsSummary")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<List<GetSuggestionsSummaryDto>>> GetSuggestionsSummary()
+        {
+            List<GetSuggestionsSummaryDto>? result = await _mediator.Send(new GetSuggestionsSummaryQuery());
+
+            return Ok(result);
         }
     }
 }

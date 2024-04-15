@@ -10,6 +10,16 @@ namespace Borkfolio.Api
         {
             builder.Services.AddControllers();
 
+            builder.Services.AddCors(
+                options => options.AddPolicy(
+                    "open",
+                    policy => policy.WithOrigins([builder.Configuration["ApiUrl"] ?? "https://localhost:7146",
+                        builder.Configuration["WebAppUrl"] ?? "https://localhost:7169"])
+            .AllowAnyMethod()
+            .SetIsOriginAllowed(pol => true)
+            .AllowAnyHeader()
+            .AllowCredentials()));
+
             builder.Services.AddInfrastructureServices();
             builder.Services.AddPersistenceServices(builder.Configuration);
             builder.Services.AddApplicationServices();
@@ -22,6 +32,8 @@ namespace Borkfolio.Api
 
         public static WebApplication ConfigurePipeline(this WebApplication app)
         {
+            app.UseCors("open");
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
