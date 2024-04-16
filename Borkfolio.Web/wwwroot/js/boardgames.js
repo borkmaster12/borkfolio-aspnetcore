@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const bgCollectionEndpoint = "https://localhost:7146/api/BoardGame/GetMyCollection";
-    const bgSuggestionEndpoint = "https://localhost:7146/api/BoardGame/GetSuggestionsSummary";
+    const bgCollectionEndpoint = "https://localhost:7146/api/BoardGame/Collection";
+    const bgSuggestionEndpoint = "https://localhost:7146/api/BoardGame/Suggestions";
     const bgSearchEndpoint = (gameId) => `https://localhost:7146/api/BoardGame/Search/${gameId}`;
     const bgCollectionTable = document.querySelector("#bgCollectionTable");
     const bgSearchResultTable = document.querySelector("#bgSearchResultTable");
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
             bgId.style.display = "none";
 
             bgRow.innerHTML = rowNum;
-            bgId.innerHTML = bg.id;
+            bgId.innerHTML = bg.boardGameGeekId;
             bgName.innerHTML = bg.name;
             bgYear.innerHTML = bg.year;
 
@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     async function addBgRecommendation(gameId) {
-        const recommendation = { value: gameId };
+        const recommendation = { boardGameGeekId: gameId };
         try {
             const response = await fetch(bgSuggestionEndpoint, {
                 method: "POST",

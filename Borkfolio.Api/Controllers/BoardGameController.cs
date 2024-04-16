@@ -1,7 +1,6 @@
 ﻿using Borkfolio.Application.Features.BoardGames.Commands.CreateSuggestion;
 using Borkfolio.Application.Features.BoardGames.Queries.GetBoardGameDetails;
 using Borkfolio.Application.Features.BoardGames.Queries.GetMyCollection;
-using Borkfolio.Application.Features.BoardGames.Queries.GetSuggestions;
 using Borkfolio.Application.Features.BoardGames.Queries.GetSuggestionsSummary;
 using Borkfolio.Application.Features.BoardGames.Queries.SearchBoardGames;
 using MediatR;
@@ -20,10 +19,10 @@ namespace Borkfolio.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet(Name = "GetMyCollection")]
+        [HttpGet(Name = "GetCollection")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult<List<CollectionItemDto>>> GetMyCollection()
+        public async Task<ActionResult<List<CollectionItemDto>>> Collection()
         {
             List<CollectionItemDto>? result = await _mediator.Send(new GetMyCollectionQuery());
 
@@ -55,7 +54,7 @@ namespace Borkfolio.Api.Controllers
         }
 
         [HttpPost(Name = "AddSuggestion")]
-        public async Task<ActionResult<CreateSuggestionCommandResponse>> AddSuggestion(
+        public async Task<ActionResult<CreateSuggestionCommandResponse>> Suggestions(
             [FromBody] CreateSuggestionCommand createSuggestionCommand
         )
         {
@@ -67,17 +66,7 @@ namespace Borkfolio.Api.Controllers
         [HttpGet(Name = "GetSuggestions")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult<List<GetSuggestionsDto>>> GetSuggestions()
-        {
-            List<GetSuggestionsDto>? result = await _mediator.Send(new GetSuggestionsQuery());
-
-            return Ok(result);
-        }
-
-        [HttpGet(Name = "GetSuggestionsSummary")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesDefaultResponseType]
-        public async Task<ActionResult<List<GetSuggestionsSummaryDto>>> GetSuggestionsSummary()
+        public async Task<ActionResult<List<GetSuggestionsSummaryDto>>> Suggestions()
         {
             List<GetSuggestionsSummaryDto>? result = await _mediator.Send(new GetSuggestionsSummaryQuery());
 
