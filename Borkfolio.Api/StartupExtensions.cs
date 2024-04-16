@@ -1,4 +1,5 @@
-﻿using Borkfolio.Application;
+﻿using Borkfolio.Api.Middleware;
+using Borkfolio.Application;
 using Borkfolio.Infrastructure;
 using Borkfolio.Persistence;
 
@@ -43,6 +44,8 @@ namespace Borkfolio.Api
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+
+            app.UseCustomExceptionHandler();
 
             app.MapControllers();
 

@@ -13,7 +13,7 @@ namespace Borkfolio.Application.Features.BoardGames.Commands.CreateSuggestion
         private readonly IBoardGameGeekService _boardGameGeekService;
         private readonly IMapper _mapper;
         private readonly IBoardGameRepository _boardGameRepository;
-        private readonly IProfanityCheckerService profanityCheckerService;
+        private readonly IProfanityCheckerService _profanityCheckerService;
 
         public CreateSuggestionCommandHandler(
             IAsyncRepository<Suggestion> suggestionsRepository,
@@ -26,7 +26,7 @@ namespace Borkfolio.Application.Features.BoardGames.Commands.CreateSuggestion
             _boardGameGeekService = boardGameGeekService;
             _mapper = mapper;
             _boardGameRepository = boardGameRepository;
-            this.profanityCheckerService = profanityCheckerService;
+            _profanityCheckerService = profanityCheckerService;
         }
 
         public async Task<CreateSuggestionCommandResponse> Handle(
@@ -42,7 +42,7 @@ namespace Borkfolio.Application.Features.BoardGames.Commands.CreateSuggestion
 
             var suggestionDto = _mapper.Map<CreateSuggestionDto>(bggGameDetails);
 
-            var validator = new CreateSuggestionCommandValidator(profanityCheckerService);
+            var validator = new CreateSuggestionCommandValidator(_profanityCheckerService);
 
             var validationResult = await validator.ValidateAsync(suggestionDto);
 

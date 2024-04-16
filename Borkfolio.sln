@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{5F6389EF-852
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Borkfolio.Web", "Borkfolio.Web\Borkfolio.Web.csproj", "{C9E2D2D6-73A6-4038-A6C2-C8285608DBCC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Borkfolio.Application.UnitTests", "Borkfolio.Application.UnitTests\Borkfolio.Application.UnitTests.csproj", "{7F407FC7-7F9C-4D70-97A6-82CCD498FDB4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{C9E2D2D6-73A6-4038-A6C2-C8285608DBCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9E2D2D6-73A6-4038-A6C2-C8285608DBCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9E2D2D6-73A6-4038-A6C2-C8285608DBCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F407FC7-7F9C-4D70-97A6-82CCD498FDB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F407FC7-7F9C-4D70-97A6-82CCD498FDB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F407FC7-7F9C-4D70-97A6-82CCD498FDB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F407FC7-7F9C-4D70-97A6-82CCD498FDB4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +78,7 @@ Global
 		{5850FB2F-D86B-45EA-922E-B45287AE4E7D} = {056FCEBC-1DE0-4F7E-B93E-1829BB9DF39E}
 		{5F6389EF-8528-4E23-A759-8C2E6DD15005} = {9BB499D4-7105-471E-8D20-2DC7A296A0F5}
 		{C9E2D2D6-73A6-4038-A6C2-C8285608DBCC} = {5F6389EF-8528-4E23-A759-8C2E6DD15005}
+		{7F407FC7-7F9C-4D70-97A6-82CCD498FDB4} = {403C7B92-B6CA-4A7A-802E-5E243C9E0A56}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0C5088DE-3D5C-4079-8061-500CAB197AFF}

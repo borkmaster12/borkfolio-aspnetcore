@@ -1,4 +1,5 @@
 ﻿using Borkfolio.Application.Contracts.Infrastructure;
+using Borkfolio.Application.Exceptions;
 using Borkfolio.Application.Models.BoardGameGeek;
 using System.Xml.Serialization;
 
@@ -27,9 +28,14 @@ namespace Borkfolio.Infrastructure.Services.BoardGameGeek
                 result = (BggGameDetailsSet?)serializer.Deserialize(reader);
             }
 
-            if (result?.Items?[0] == null)
+            if (result?.Items == null)
             {
-                throw new Exception("TODO: update this null collection exception");
+                throw new BadRequestException("Failed to deserialize bgg response");
+            }
+
+            if (result.Items.Count < 1)
+            {
+                throw new NotFoundException("Game details", id);
             }
 
             return result.Items[0];
@@ -51,7 +57,7 @@ namespace Borkfolio.Infrastructure.Services.BoardGameGeek
 
             if (result == null)
             {
-                throw new Exception("TODO: update this null collection exception");
+                throw new BadRequestException("Failed to deserialize bgg response");
             }
 
             return result.Items;

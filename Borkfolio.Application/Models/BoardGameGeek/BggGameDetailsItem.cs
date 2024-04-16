@@ -33,7 +33,7 @@ namespace Borkfolio.Application.Models.BoardGameGeek
 
         [JsonIgnore]
         [XmlElement(ElementName = "minage")]
-        public YearElement _minimumAge { private get; init; } = default!;
+        public MinimumAgeElement _minimumAge { private get; init; } = default!;
 
         [XmlRoot(ElementName = "name")]
         public class NameElement
