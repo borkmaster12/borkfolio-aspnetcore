@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Borkfolio.Application.Contracts.Infrastructure;
 using Borkfolio.Application.Contracts.Persistence;
+using Borkfolio.Application.Exceptions;
 using Borkfolio.Application.Features.BoardGames.Commands.CreateSuggestion;
 using Borkfolio.Application.Models.BoardGameGeek;
 using Borkfolio.Application.Profiles;
@@ -32,11 +33,11 @@ namespace Borkfolio.Application.UnitTests.BoardGames.Commands
         [SetUp]
         public void Setup()
         {
-            _mockSuggestionsRepository = RepositoryMockFactory.GetMockRepository<
+            _mockSuggestionsRepository = MockRepositoryFactory.GetMockRepository<
                 ISuggestionsRepository,
                 Suggestion
             >();
-            _mockBoardGameRepository = RepositoryMockFactory.GetMockRepository<
+            _mockBoardGameRepository = MockRepositoryFactory.GetMockRepository<
                 IBoardGameRepository,
                 BoardGame
             >();
@@ -177,7 +178,10 @@ namespace Borkfolio.Application.UnitTests.BoardGames.Commands
             Assert.Multiple(() =>
             {
                 Assert.That(result.Success, Is.False);
-                Assert.That(result.ValidationErrors, Is.Not.Empty);
+                Assert.That(
+                    result.ValidationErrors,
+                    Is.Not.Null.And.Contains("Keep the suggestions clean please")
+                );
             });
         }
 
@@ -204,7 +208,44 @@ namespace Borkfolio.Application.UnitTests.BoardGames.Commands
             Assert.Multiple(() =>
             {
                 Assert.That(result.Success, Is.False);
-                Assert.That(result.ValidationErrors, Is.Not.Empty);
+                Assert.That(
+                    result.ValidationErrors,
+                    Is.Not.Null.And.Contains("No games with an age rating of 17+")
+                );
+            });
+        }
+
+        [Test]
+        public async Task FailWhenGameIdNotFound()
+        {
+            int bggGameId = 1;
+            string bggGameName = "Example Name";
+            int bggGameYear = 2024;
+            int bggGameMinAge = 17;
+
+            var sut = SetupCommandHandler(
+                bggGameId,
+                bggGameName,
+                bggGameYear,
+                bggGameMinAge,
+                containsProfanity: false
+            );
+
+            _mockBoardGameGeekService
+                .Setup(s => s.GetBoardGameDetails(bggGameId))
+                .Throws(new NotFoundException("Game id", bggGameId));
+
+            var request = new CreateSuggestionCommand { BoardGameGeekId = bggGameId };
+
+            var result = await sut.Handle(request, CancellationToken.None);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.Success, Is.False);
+                Assert.That(
+                    result.ValidationErrors,
+                    Is.Not.Null.And.Contains($"Game id ({bggGameId}) not found")
+                );
             });
         }
 

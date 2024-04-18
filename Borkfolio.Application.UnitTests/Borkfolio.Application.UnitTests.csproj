@@ -23,10 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="BoardGames\Queries\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Borkfolio.Application\Borkfolio.Application.csproj" />
   </ItemGroup>
 

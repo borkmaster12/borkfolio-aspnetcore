@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Borkfolio.Application.Contracts.Infrastructure;
 using Borkfolio.Application.Contracts.Persistence;
+using Borkfolio.Application.Models.BoardGameGeek;
 using Borkfolio.Domain.Entities;
 using MediatR;
 
@@ -36,9 +37,20 @@ namespace Borkfolio.Application.Features.BoardGames.Commands.CreateSuggestion
         {
             var response = new CreateSuggestionCommandResponse();
 
-            var bggGameDetails = await _boardGameGeekService.GetBoardGameDetails(
+            BggGameDetailsItem bggGameDetails;
+
+            try
+            {
+                bggGameDetails = await _boardGameGeekService.GetBoardGameDetails(
                 request.BoardGameGeekId
-            );
+                );
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.ValidationErrors = new List<string>() { ex.Message };
+                return response;
+            }
 
             var suggestionDto = _mapper.Map<CreateSuggestionDto>(bggGameDetails);
 

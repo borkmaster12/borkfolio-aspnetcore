@@ -1,28 +1,10 @@
 ﻿using Borkfolio.Application.Contracts.Persistence;
-using Borkfolio.Domain.Entities;
 using Moq;
 
 namespace Borkfolio.Application.UnitTests.Mocks
 {
-    public class RepositoryMockFactory
+    public class MockRepositoryFactory
     {
-        public static Mock<ISuggestionsRepository> GetSuggestionsRepository()
-        {
-            var suggestions = new List<Suggestion>();
-            var mockSuggestionsRepository = new Mock<ISuggestionsRepository>();
-
-            mockSuggestionsRepository.Setup(r => r.ListAllAsync()).ReturnsAsync(suggestions);
-
-            mockSuggestionsRepository.Setup(repo => repo.AddAsync(It.IsAny<Suggestion>())).ReturnsAsync(
-                (Suggestion suggestion) =>
-                {
-                    suggestions.Add(suggestion);
-                    return suggestion;
-                });
-
-            return mockSuggestionsRepository;
-        }
-
         public static Mock<T1> GetMockRepository<T1, T2>()
             where T1 : class, IAsyncRepository<T2>
             where T2 : class

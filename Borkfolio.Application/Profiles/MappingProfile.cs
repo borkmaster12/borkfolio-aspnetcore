@@ -15,7 +15,6 @@ namespace Borkfolio.Application.Profiles
         {
             CreateMap<BggCollectionItem, CollectionItemDto>()
                 .ForMember(dest => dest.BoardGameGeekId, act => act.MapFrom(src => src.Id));
-            ;
 
             CreateMap<BggGameDetailsItem, BoardGameDetailsDto>()
                 .ForMember(dest => dest.BoardGameGeekId, act => act.MapFrom(src => src.Id));

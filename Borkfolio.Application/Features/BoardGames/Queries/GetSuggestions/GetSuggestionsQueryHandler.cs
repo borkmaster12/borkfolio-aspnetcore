@@ -8,7 +8,8 @@ namespace Borkfolio.Application.Features.BoardGames.Queries.GetSuggestions
     public class GetSuggestionsQueryHandler
         : IRequestHandler<GetSuggestionsQuery, List<GetSuggestionsDto>>
     {
-        private readonly IAsyncRepository<Suggestion> _suggestionsRepository; private readonly IMapper _mapper;
+        private readonly IAsyncRepository<Suggestion> _suggestionsRepository;
+        private readonly IMapper _mapper;
 
         public GetSuggestionsQueryHandler(
             IAsyncRepository<Suggestion> suggestionsRepository,
