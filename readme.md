@@ -1,0 +1,1 @@
+Quick port of my personal site to aspnetcore, loosely organized based on a clean architecture approach, utilizing CQRS and Mediator pattern to implement application features.
