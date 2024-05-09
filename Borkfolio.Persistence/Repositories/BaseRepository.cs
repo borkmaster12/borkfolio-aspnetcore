@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Borkfolio.Persistence.Repositories
 {
-    public class BaseRepository<T> : IAsyncRepository<T> where T : class
+    public class BaseRepository<T> : IAsyncRepository<T>
+        where T : class
     {
         protected readonly BorkfolioDbContext dbContext;
 
@@ -26,7 +27,7 @@ namespace Borkfolio.Persistence.Repositories
             await dbContext.SaveChangesAsync();
         }
 
-        public virtual async Task<T?> GetByIdAsync(int id)
+        public virtual async Task<T?> GetByIdAsync(Guid id)
         {
             return await dbContext.Set<T>().FindAsync(id);
         }
